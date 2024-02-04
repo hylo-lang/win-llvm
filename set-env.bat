@@ -77,13 +77,13 @@ goto :loop
 
 :msvc16
 set TOOLCHAIN=msvc16
-set CMAKE_GENERATOR=Ninja
+set CMAKE_GENERATOR=Visual Studio 16 2019
 shift
 goto :loop
 
 :msvc17
 set TOOLCHAIN=msvc17
-set CMAKE_GENERATOR=Ninja
+set CMAKE_GENERATOR=Visual Studio 17 2022
 shift
 goto :loop
 
