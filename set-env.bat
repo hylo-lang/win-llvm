@@ -77,13 +77,13 @@ goto :loop
 
 :msvc16
 set TOOLCHAIN=msvc16
-set CMAKE_GENERATOR=Visual Studio 16 2019
+set CMAKE_GENERATOR=Ninja
 shift
 goto :loop
 
 :msvc17
 set TOOLCHAIN=msvc17
-set CMAKE_GENERATOR=Visual Studio 17 2022
+set CMAKE_GENERATOR=Ninja
 shift
 goto :loop
 
@@ -183,6 +183,9 @@ set LLVM_CMAKE_CONFIGURE_FLAGS= ^
 	-DLLVM_INCLUDE_TESTS=OFF ^
 	-DLLVM_INCLUDE_UTILS=OFF ^
 	-DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON ^
+	-DLLDB_INCLUDE_TESTS=OFF ^
+	-DCMAKE_C_COMPILER_LAUNCHER=sccache ^
+	-DCMAKE_CXX_COMPILER_LAUNCHER=sccache ^
 	%LLVM_CMAKE_CONFIGURE_EXTRA_FLAGS%
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
