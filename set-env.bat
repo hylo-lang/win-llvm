@@ -15,6 +15,7 @@ if /i "%1" == "i386" goto :x86
 if /i "%1" == "amd64" goto :amd64
 if /i "%1" == "x86_64" goto :amd64
 if /i "%1" == "x64" goto :amd64
+if /i "%1" == "arm64" goto :arm64
 @REM if /i "%1" == "msvc10" goto :msvc10
 @REM if /i "%1" == "msvc12" goto :msvc12
 @REM if /i "%1" == "msvc14" goto :msvc14
@@ -38,14 +39,24 @@ exit -1
 :x86
 set TARGET_CPU=x86
 set CMAKE_GENERATOR_SUFFIX=
+set CMAKE_PLATFORM_FLAG="-A x86"
 shift
 goto :loop
 
 :amd64
 set TARGET_CPU=amd64
-set CMAKE_GENERATOR_SUFFIX=
+set CMAKE_GENERATOR_SUFFIX=" Win64"
+set CMAKE_PLATFORM_FLAG="-A x64"
 shift
 goto :loop
+
+:arm64
+set TARGET_CPU=arm64
+set CMAKE_GENERATOR_SUFFIX=" ARM"
+set CMAKE_PLATFORM_FLAG="-A arm64"
+shift
+goto :loop
+
 
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -54,36 +65,42 @@ goto :loop
 :msvc10
 set TOOLCHAIN=msvc10
 set CMAKE_GENERATOR=Visual Studio 10 2010
+set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc12
 set TOOLCHAIN=msvc12
 set CMAKE_GENERATOR=Visual Studio 12 2013
+set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc14
 set TOOLCHAIN=msvc14
 set CMAKE_GENERATOR=Visual Studio 14 2015
+set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc15
 set TOOLCHAIN=msvc15
 set CMAKE_GENERATOR=Visual Studio 15 2017
+set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc16
 set TOOLCHAIN=msvc16
 set CMAKE_GENERATOR=Visual Studio 16 2019
+set CMAKE_GENERATOR_SUFFIX=
 shift
 goto :loop
 
 :msvc17
 set TOOLCHAIN=msvc17
 set CMAKE_GENERATOR=Visual Studio 17 2022
+set CMAKE_GENERATOR_SUFFIX=
 shift
 goto :loop
 
@@ -121,7 +138,7 @@ goto :loop
 :dbg
 set CONFIGURATION=Debug
 set DEBUG_SUFFIX=-dbg
-set LLVM_CMAKE_CONFIGURE_EXTRA_FLAGS=-DLLVM_BUILD_TOOLS=OFF -DLLVM_OPTIMIZED_TABLEGEN=ON
+set LLVM_CMAKE_CONFIGURE_EXTRA_FLAGS=-DLLVM_OPTIMIZED_TABLEGEN=ON
 set CLANG_CMAKE_CONFIGURE_EXTRA_FLAGS=-DCLANG_BUILD_TOOLS=OFF
 shift
 goto :loop
@@ -165,6 +182,7 @@ set LLVM_RELEASE_URL=https://github.com/hylo-lang/win-llvm/releases/download/%LL
 
 set LLVM_CMAKE_CONFIGURE_FLAGS= ^
 	-G "%CMAKE_GENERATOR%%CMAKE_GENERATOR_SUFFIX%" ^
+	%CMAKE_PLATFORM_FLAG% ^
 	-Thost=x64 ^
 	-DCMAKE_INSTALL_PREFIX=%LLVM_RELEASE_DIR% ^
 	-DCMAKE_DISABLE_FIND_PACKAGE_LibXml2=TRUE ^
@@ -183,7 +201,6 @@ set LLVM_CMAKE_CONFIGURE_FLAGS= ^
 	-DLLVM_INCLUDE_TESTS=OFF ^
 	-DLLVM_INCLUDE_UTILS=OFF ^
 	-DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON ^
-	-DLLDB_INCLUDE_TESTS=OFF ^
 	-DCMAKE_C_COMPILER_LAUNCHER=sccache ^
 	-DCMAKE_CXX_COMPILER_LAUNCHER=sccache ^
 	%LLVM_CMAKE_CONFIGURE_EXTRA_FLAGS%
