@@ -39,21 +39,21 @@ exit -1
 :x86
 set TARGET_CPU=x86
 set CMAKE_GENERATOR_SUFFIX=
-set CMAKE_PLATFORM_FLAG="-A x86"
+set CMAKE_PLATFORM_FLAG=-Ax86
 shift
 goto :loop
 
 :amd64
 set TARGET_CPU=amd64
 set CMAKE_GENERATOR_SUFFIX=" Win64"
-set CMAKE_PLATFORM_FLAG="-A x64"
+set CMAKE_PLATFORM_FLAG=-Ax64
 shift
 goto :loop
 
 :arm64
 set TARGET_CPU=arm64
 set CMAKE_GENERATOR_SUFFIX=" ARM"
-set CMAKE_PLATFORM_FLAG="-A arm64"
+set CMAKE_PLATFORM_FLAG=-Aarm64
 shift
 goto :loop
 
