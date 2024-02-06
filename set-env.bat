@@ -57,7 +57,6 @@ set CMAKE_PLATFORM_FLAG="-A arm64"
 shift
 goto :loop
 
-
 :: . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 :: Toolchain
@@ -133,12 +132,14 @@ shift
 goto :loop
 
 :: don't try to build Debug tools -- executables will be huge and not really
-:: essential (whoever needs tools, can just download a Release build)
+:: essential (whoever needs tools, can just download a Release build).  But
+:: since LLVM-17 needs llvm-nm to do its build, we'll build that one.
 
 :dbg
 set CONFIGURATION=Debug
 set DEBUG_SUFFIX=-dbg
 set LLVM_CMAKE_CONFIGURE_EXTRA_FLAGS=-DLLVM_OPTIMIZED_TABLEGEN=ON
+set LLVM_CMAKE_CONFIGURE_EXTRA_FLAGS=-DLLVM_BUILD_TOOLS=OFF -DLLVM_EXTERNAL_PROJECTS=llvm-nm -DLLVM_OPTIMIZED_TABLEGEN=ON
 set CLANG_CMAKE_CONFIGURE_EXTRA_FLAGS=-DCLANG_BUILD_TOOLS=OFF
 shift
 goto :loop

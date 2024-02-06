@@ -23,6 +23,7 @@ jobs:
                 TARGET_CPU:
                 -   x86
                 -   amd64
+                -   arm64
 
                 CONFIGURATION:
                 -   Debug
