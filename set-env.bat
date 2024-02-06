@@ -45,14 +45,14 @@ goto :loop
 
 :amd64
 set TARGET_CPU=amd64
-set CMAKE_GENERATOR_SUFFIX=" Win64"
+set CMAKE_GENERATOR_SUFFIX= Win64
 set CMAKE_PLATFORM_FLAG=-Ax64
 shift
 goto :loop
 
 :arm64
 set TARGET_CPU=arm64
-set CMAKE_GENERATOR_SUFFIX=" ARM"
+set CMAKE_GENERATOR_SUFFIX= ARM
 set CMAKE_PLATFORM_FLAG=-Aarm64
 shift
 goto :loop
@@ -64,42 +64,38 @@ goto :loop
 :msvc10
 set TOOLCHAIN=msvc10
 set CMAKE_GENERATOR=Visual Studio 10 2010
-set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc12
 set TOOLCHAIN=msvc12
 set CMAKE_GENERATOR=Visual Studio 12 2013
-set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc14
 set TOOLCHAIN=msvc14
 set CMAKE_GENERATOR=Visual Studio 14 2015
-set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc15
 set TOOLCHAIN=msvc15
 set CMAKE_GENERATOR=Visual Studio 15 2017
-set CMAKE_PLATFORM_FLAG=
 shift
 goto :loop
 
 :msvc16
 set TOOLCHAIN=msvc16
 set CMAKE_GENERATOR=Visual Studio 16 2019
-set CMAKE_GENERATOR_SUFFIX=
+set CMAKE_USE_PLATFORM_FLAG=true
 shift
 goto :loop
 
 :msvc17
 set TOOLCHAIN=msvc17
 set CMAKE_GENERATOR=Visual Studio 17 2022
-set CMAKE_GENERATOR_SUFFIX=
+set CMAKE_USE_PLATFORM_FLAG=true
 shift
 goto :loop
 
@@ -180,6 +176,9 @@ set LLVM_RELEASE_FILE=%LLVM_RELEASE_NAME%.7z
 set LLVM_RELEASE_DIR=%WORKING_DIR%\%LLVM_RELEASE_NAME%
 set LLVM_RELEASE_DIR=%LLVM_RELEASE_DIR:\=/%
 set LLVM_RELEASE_URL=https://github.com/hylo-lang/win-llvm/releases/download/%LLVM_RELEASE_TAG%/%LLVM_RELEASE_FILE%
+
+if "%CMAKE_USE_PLATFORM_FLAG%" == "true" (set CMAKE_GENERATOR_SUFFIX=)
+else (set CMAKE_PLATFORM_FLAG=)
 
 set LLVM_CMAKE_CONFIGURE_FLAGS= ^
 	-G "%CMAKE_GENERATOR%%CMAKE_GENERATOR_SUFFIX%" ^
